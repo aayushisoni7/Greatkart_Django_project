@@ -161,4 +161,3 @@ myenv
 env
 .env-sample
 requirements.txt
-db.sqlite3
