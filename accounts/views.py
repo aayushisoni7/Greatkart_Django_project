@@ -25,7 +25,7 @@ def register(request):
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            phone_number = form.cleaned_data['phone_number']
+            phone_number = form.cleaned_data['phone_number']   
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             username = email.split("@")[0]
@@ -33,13 +33,13 @@ def register(request):
             user.phone_number = phone_number
             user.save()
 
-            # Create a user profile
-            profile = UserProfile()
+            # Create a user profile   
+            profile = UserProfile()        
             profile.user_id = user.id
-            profile.profile_picture = 'default/default-user.png'
+            profile.profile_picture = 'default/default-user.png'    
             profile.save()
 
-            # USER ACTIVATION
+            # USER ACTIVATION  
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
             message = render_to_string('accounts/account_verification_email.html', {
@@ -48,11 +48,13 @@ def register(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
             })
-            to_email = email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
-            send_email.send()
+            # to_email = email
+            # send_email = EmailMessage(mail_subject, message, to=[to_email])
+            # send_email.send()
+            print('hello3')
             # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
-            return redirect('/accounts/login/?command=verification&email='+email)
+            activate(request, user.pk, default_token_generator.make_token(user))
+            return redirect('/accounts/login/')
     else:
         form = RegistrationForm()
     context = {
@@ -67,6 +69,7 @@ def login(request):
         password = request.POST['password']
 
         user = auth.authenticate(email=email, password=password)
+        print('user info',user)
 
         if user is not None:
             try:
@@ -97,7 +100,7 @@ def login(request):
                         if pr in ex_var_list:
                             index = ex_var_list.index(pr)
                             item_id = id[index]
-                            item = CartItem.objects.get(id=item_id)
+                            item = CartItem.objects.get(id=item_id) 
                             item.quantity += 1
                             item.user = user
                             item.save()
@@ -133,9 +136,9 @@ def logout(request):
     return redirect('login')
 
 
-def activate(request, uidb64, token):
+def activate(request, uid, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
+        # uid = urlsafe_base64_decode(uidb64).decode()
         user = Account._default_manager.get(pk=uid)
     except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
         user = None

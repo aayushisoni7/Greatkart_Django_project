@@ -72,8 +72,8 @@
 									</td>
 									<td>
 										<div class="price-wrap">
-											<var class="price">$ {{ cart_item.sub_total }}</var>
-											<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+											<var class="price">₹ {{ cart_item.sub_total }}</var>
+											<small class="text-muted"> ₹ {{ cart_item.product.price }} each </small>
 										</div> <!-- price-wrap .// -->
 									</td>
 
@@ -93,15 +93,15 @@
 					<div class="card-body">
 						<dl class="dlist-align">
 							<dt>Total price:</dt>
-							<dd class="text-right">$ {{total}}</dd>
+							<dd class="text-right">₹ {{total}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Tax:</dt>
-							<dd class="text-right"> $ {{tax}}</dd>
+							<dd class="text-right"> ₹ {{tax}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Grand Total:</dt>
-							<dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
+							<dd class="text-right text-dark b"><strong>₹ {{grand_total}}</strong></dd>
 						</dl>
 						<hr>
 						<p class="text-center mb-3">
@@ -110,14 +110,52 @@
 
 
 						<div id="paypal-button-container">
-							<!-- PayPal Button Will Load -->
+							<!-- Static PayPal Button -->
+							{% comment %} <form action="{% url 'payment_success' %}" method="GET">
+								<button type="submit" name="submit" class="btn btn-primary btn-block">
+								<img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height: 22px; margin-right: 10px;">
+								PayPal
+								</button>
+
+
+								<p style="text-align:center; font-size:12px; color:#6c757d; margin-top:5px;">
+								Powered by <strong>PayPal</strong>
+								</p>
+							</form> {% endcomment %}
+							<form method="GET" action="{% url 'payment_success' %}">
+  <button type="submit" style="
+    background-color: #ffc439;
+    color: #111;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    width: 100%;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  ">
+    <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height: 22px; margin-right: 10px;">
+    PayPal
+  </button>
+  <p style="text-align:center; font-size:12px; color:#6c757d; margin-top:5px;">
+    Powered by <strong>PayPal</strong>
+  </p>
+</form>
+
 						</div>
 
 					</div> <!-- card-body.// -->
 				</div> <!-- card.// -->
-				<div class="alert alert-danger" role="alert">
+
+				{% comment %} Vishal Changes {% endcomment %}
+				{% comment %} <div class="alert alert-danger" role="alert">
 				  <b>Please Note: </b>This is a demo website. Do not try to make real payments.
-				</div>
+				</div> {% endcomment %}
 			</aside> <!-- col.// -->
 
 
@@ -129,81 +167,19 @@
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
-<script>
-
-	function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-	var amount = "{{ grand_total }}"
-	var url = "{% url 'payments' %}"
-	var csrftoken = getCookie('csrftoken');
-	var orderID = "{{order.order_number}}"
-	var payment_method = 'PayPal'
-	var redirect_url = "{% url 'order_complete' %}"
+{% comment %} <script>
 	// Render the PayPal button into #paypal-button-container
 	paypal.Buttons({
 
-		style: {
-			color: 'blue',
-			shape: 'rect',
-			label: 'pay',
-			height: 40
-		},
-
-		// Set up the transaction
+		// Call your server to set up the transaction
 		createOrder: function(data, actions) {
-			return actions.order.create({
-				purchase_units: [{
-					amount: {
-						value: amount,
-					}
-				}]
-			});
+			window.location.href = "/orders/payment_success/";
+			
 		},
 
-		// Finalize the transaction
-		onApprove: function(data, actions) {
-			return actions.order.capture().then(function(details) {
-				// Show a success message to the buyer
-				console.log(details);
-				sendData();
-				function sendData(){
-					fetch(url, {
-						method : "POST",
-						headers: {
-							"Content-type": "application/json",
-							"X-CSRFToken": csrftoken,
-						},
-						body: JSON.stringify({
-							orderID: orderID,
-							transID: details.id,
-							payment_method: payment_method,
-							status: details.status,
-						}),
-					})
-				  .then((response) => response.json())
-				  .then((data) => {
-						window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
-					});
-				}
-			});
-		}
-
+		
 
 	}).render('#paypal-button-container');
-</script>
+</script> {% endcomment %}
 
 {% endblock %}

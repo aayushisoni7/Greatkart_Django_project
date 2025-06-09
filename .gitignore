@@ -155,3 +155,10 @@ dmypy.json
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+#Arvind changes
+myenv
+env
+.env-sample
+requirements.txt
+db.sqlite3

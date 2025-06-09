@@ -14,3 +14,9 @@ def home(request):
         'reviews': reviews,
     }
     return render(request, 'home.html', context)
+
+#********************************************
+#def payment_success(request):
+ #   return render(request, 'payment_success.html')
+
+#********************************************

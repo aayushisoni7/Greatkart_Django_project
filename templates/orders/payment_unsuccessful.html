@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Unsuccessful</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #fff5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .fail-box {
+      max-width: 600px;
+      margin: 100px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .fail-animation {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+    }
+
+    .crossmark {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw 2s ease-out forwards;
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .btn-try-again {
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fail-box">
+    <svg class="fail-animation" viewBox="0 0 52 52">
+      <circle cx="26" cy="26" r="25" fill="none" stroke="#f44336" stroke-width="3"/>
+      <path class="crossmark" fill="none" stroke="#f44336" stroke-width="3" d="M16 16 L36 36 M36 16 L16 36"/>
+    </svg>
+
+    <h2>Payment Failed!</h2>
+    <p>Sorry, your payment was not successful. Please try again.</p>
+    <a href="/checkout/" class="btn btn-danger btn-try-again">Try Again</a>
+  </div>
+
+</body>
+</html>

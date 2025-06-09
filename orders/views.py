@@ -14,6 +14,8 @@ def payments(request):
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
 
+    #********************************
+
     # Store transaction details inside Payment model
     payment = Payment(
         user = request.user,
@@ -133,6 +135,13 @@ def place_order(request, total=0, quantity=0,):
     else:
         return redirect('checkout')
 
+def payment_success(request):
+     return render(request, 'orders/payment_success.html')
+# #******************************
+def payment_unsuccessful(request):
+    return render(request, 'payment_unsuccessful.html')
+
+#***************************
 
 def order_complete(request):
     order_number = request.GET.get('order_number')
